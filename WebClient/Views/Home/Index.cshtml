@@ -1,0 +1,77 @@
+﻿@using PresentationWeb.Models
+@{
+    var vm = Model as ListBooksViewModel;
+    var books = vm?.Books;
+}
+
+<div class="container">
+    <h2 class="mb-4">Últimos libros</h2>
+    <div class="">
+        @if (books == null)
+        {
+            <div class="alert alert-info">
+                No se encontraron libros
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-sm-2 row-cols-lg-3 g-4">
+                @foreach (var book in books)
+                {
+                    <div class="col">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4 d-flex flex-row align-items-center justify-content-center">
+                                    <img src="@book.Image" class="img-fluid rounded-start" alt="..." style="min-height: 100%">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column position-relative" style="height: 100%">
+                                        <h5 class="card-title mb-0">@book.Title</h5>
+                                        <p class="card-text flex-1">
+                                            <ul class="list-unstyled mb-0">
+                                                <li>
+                                                    <strong>Autor:</strong>
+                                                    <span>@(book.Author.Firstname ?? "") @(book.Author.Lastname ?? "") @(book.Author.Pseudonym != null ? $"({book.Author.Pseudonym})" : "")</span>
+                                                </li>
+                                                <li>
+                                                    <strong>Año:</strong>
+                                                    <span>@book.Year</span>
+                                                </li>
+                                                <li>
+                                                    <strong>Precio</strong>
+                                                    <span>$ @String.Format("{0:0.00}", book.Price)</span>
+                                                </li>
+                                            </ul>
+                                        </p>
+                                        <div class="actions position-absolute small" style="bottom: 5px; right: 5px">
+                                            <ul class="list-unstyled d-flex flex-row mb-0 gap-3">
+                                                @if (!book.IsLend)
+                                                {
+                                                    <li>
+                                                        <a class="lend-book" asp-action="LendBook" asp-controller="Home" asp-route-id="@book.Id">
+                                                            <i class="fa-solid fa-hand-holding"></i>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                <li>
+                                                    <a class="edit-book" asp-action="EditBook" asp-controller="Home" asp-route-id="@book.Id">
+                                                        <i class="bi bi-pencil-fill"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="delete-book" asp-action="DeleteBook" asp-controller="Home" asp-route-id="@book.Id">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

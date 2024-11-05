@@ -1,0 +1,62 @@
+﻿@using PresentationWeb.Models
+@{
+    var vm = Model as ListLoansViewModel;
+    var loans = vm?.Loans;
+}
+
+<div class="container">
+    <h2 class="mb-4">Últimos préstamos</h2>
+    <div class="">
+        @if (loans == null || loans.Count == 0)
+        {
+            <div class="alert alert-info">
+                No se encontraron préstamos
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column gap-4">
+                @foreach (var loan in loans)
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            Préstamo realizado el <strong>@loan.LoanedOn.ToString("dd/MM/yyyy H:mm:ss")</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <strong>Titulo del Libro: </strong>
+                                        <span>@loan.Book.Title</span>
+                                    </li>
+                                    <li>
+                                        <strong>Autor del Libro: </strong>
+                                        <span>@loan.Book.Author.Firstname @loan.Book.Author.Lastname</span>
+                                    </li>
+                                    <li>
+                                        <strong>Cédula: </strong>
+                                        <span>@loan.IdentificationNumber</span>
+                                    </li>
+                                    <li>
+                                        <strong>Email: </strong>
+                                        <span>@loan.Email</span>
+                                    </li>
+                                </ul>
+                            </p>
+                            <div class="d-flex flex-row justify-content-end">
+                                @if (loan.Status != "PENDING")
+                                {
+                                    <div class="alert alert-info w-100">El libro ya ha sido devuelto</div>
+                                }
+                                else
+                                {
+                                    <a asp-action="CompleteLoan" asp-asp-controller="Home" asp-route-id="@loan.Id" class="btn btn-primary complete-loan">Marcar como devuelto</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

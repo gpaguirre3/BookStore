@@ -1,0 +1,65 @@
+﻿@using PresentationWeb.Models
+@{
+    var vm = Model as AuthorsIndexViewModel;
+    var authors = vm?.Authors;
+    var errors = vm?.Errors;
+}
+
+<div class="container">
+    <h2 class="mb-4">Autores registrados</h2>
+    <div class="">
+        @if (errors != null && errors.Count > 0)
+        {
+            <div class="alert alert-danger">
+                <ul class="list-unstyled">
+                    @foreach (var error in errors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (authors == null || authors.Count == 0)
+        {
+            <div class="alert alert-info">
+                No se encontraron autores registrados
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Nombre(s)</td>
+                        <td>Apellido(s)</td>
+                        <td>Pseudonimo</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var author in authors)
+                    {
+                        <tr>
+                            <td>@author.Id</td>
+                            <td>@author.Firstname</td>
+                            <td>@author.Lastname</td>
+                            <td>@(author.Pseudonym ?? "-")</td>
+                            <td>
+                                <div class="d-flex flex-row justify-content-end">
+                                    <a class="delete me-3" asp-action="DeleteAuthor" asp-controller="Authors" asp-route-id="@author.Id">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                    <a class="edit me-3" asp-action="EditAuthor" asp-controller="Authors" asp-route-id="@author.Id">
+                                        <i class="fa fa-pen"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

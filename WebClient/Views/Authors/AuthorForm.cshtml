@@ -1,0 +1,45 @@
+﻿@using PresentationWeb.ApiService
+@using PresentationWeb.Models
+
+@{
+	var vm = Model as AuthorFormViewModel;
+	var author = vm?.Author;
+	var errors = vm?.Errors;
+}
+
+<div class="container" style="max-width: 900px">
+	<h2>@(author?.Id > 0 ? "Editar Autor" : "Agregar Autor")</h2>
+	<form asp-action="SaveAuthor" asp-controller="Authors">
+		@if (errors != null && errors.Count > 0)
+		{
+			<div class="mb-5 alert alert-danger">
+				<ul class="list-unstyled">
+					@foreach (var error in errors)
+					{
+						<li>@error</li>
+					}
+				</ul>
+			</div>
+		}
+		<div class="form-group mb-3 d-flex flex-column">
+			<label>Nombre(s) *</label>
+			<input class="form-control" name="Firstname" type="text" value="@author?.Firstname" required />
+		</div>
+		<div class="form-group mb-3 d-flex flex-column">
+			<label>Apellido(s) *</label>
+			<input class="form-control" name="Lastname" type="text" value="@author?.Lastname" required />
+		</div>
+		<div class="form-group mb-3 d-flex flex-column">
+			<label>Pseudónimo</label>
+			<input class="form-control" name="Pseudonym" type="text" value="@author?.Pseudonym" />
+		</div>
+		<div class="mt-2 d-flex flex-row align-items-end justify-content-end">
+			@if (author != null && author.Id > 0)
+			{
+				<input type="hidden" name="id" value="@author.Id" />
+			}
+
+			<button class="btn btn-primary" type="submit">Guardar</button>
+		</div>
+	</form>
+</div>
